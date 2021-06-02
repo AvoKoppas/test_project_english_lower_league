@@ -3,7 +3,9 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-    const [responseData, setResponseData] = useState(['Here comes info']);
+    const [responseData, setResponseData] = useState(['']);
+    const [endDate, setEndDate] = useState(['']);
+    const [leagueData, setLeagueData] = useState(['']);
     const options = {
         method: 'GET',
         url: 'https://sportscore1.p.rapidapi.com/leagues/26',
@@ -16,22 +18,27 @@ function App() {
         axios(options)
 
             .then((response) => {
-                console.log(response)
-                setResponseData(response.data)
+                console.log(response.data)
+                setResponseData(response.data.data);
+                setEndDate(response.data.data.end_date);
+                setLeagueData(response.data.data.facts[0]);
             })
             .catch((error) => {
                 console.log(error)
             })
-    }, [])
+    }, [options]);
+    console.log(responseData);
+    console.log(responseData.end_date);
+    console.log(responseData.facts);
     return (
         <div className="container-fluid p-3">
             <button type='button' onClick={fetchData}> click for football data
             </button>
-            <table border={2}>
-                <li>
-                    {JSON.stringify(responseData, null, 4)} <br/>
-                </li>
-            </table>
+            <p>
+                The facts: {leagueData && leagueData.facts}
+            </p>
+            <p>The end: {endDate}
+            </p>
         </div>
     );
 }
